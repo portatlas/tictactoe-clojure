@@ -1,7 +1,4 @@
 (ns tictactoe-clojure.board-spec
-  (:require [speclj.core :refer :all]
-            [tictactoe-clojure.board :refer :all]))
-
 	(:require [speclj.core :refer :all]
 		[tictactoe-clojure.board :refer :all]))
 
