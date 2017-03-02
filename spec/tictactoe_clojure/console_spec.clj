@@ -13,5 +13,4 @@
   	(it "prints the message to the screen and ask user for input"
   		(should= "0"
   			(with-in-str "0"
-  				(prompt "Enter position on the board")))))
-  )
+  				(prompt "Enter position on the board"))))))
