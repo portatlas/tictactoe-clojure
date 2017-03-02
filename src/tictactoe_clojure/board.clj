@@ -19,8 +19,9 @@
   	    (take-nth 4 board)
   	    (drop 1 (drop-last (take-nth 2 board)))))
 
-  (defn valid-slots [board]
-    (filter integer? board))
+  (defn valid-slots 
+  	[board]
+      (filter integer? board))
 
   (defn valid-move?
     [position board]
@@ -28,7 +29,8 @@
   	    true 
   	    false))
 
-  (defn move [board position symbol]
-    (if (valid-move? position board )
-      (assoc new-board position symbol)
-	    "Invalid Move"))
+  (defn move 
+  	[board position mark]
+      (if (valid-move? position board )
+        (assoc new-board position mark)
+	      "Invalid Move"))

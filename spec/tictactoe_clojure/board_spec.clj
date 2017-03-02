@@ -35,7 +35,9 @@
  		(it "returns a vector of the last 8 spots when the first position is taken"
  			(should= [1 2 3 4 5 6 7 8] (valid-slots ["X" 1 2 3 4 5 6 7 8])))
  		(it "returns a vector of the first row when slots in the 2nd and 3rd row are taken"
- 			(should= [0 1 2] (valid-slots [0 1 2 "O" "X" "O" "X" "O" "O"]))))
+ 			(should= [0 1 2] (valid-slots [0 1 2 "O" "X" "O" "X" "O" "O"])))
+ 		(it "returns an empty vector if there are not valid slots"
+ 			(should= [] (valid-slots ["X" "O" "X" "O" "O" "X" "X" "X" "O"]))))
 
   (describe "#valid-move?"
 	  (it "returns true if the position is availabe in the board"
