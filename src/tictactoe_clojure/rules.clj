@@ -12,5 +12,7 @@
   	(if (every? #{"X"} combination) "X"
   	  (if (every? #{"O"} combination) "O")))
 
-  (defn winner? [board]
-  	(first (filter #{"X" "O"} (map winner-in-given-combination (winning-combinations board)))))
+  (defn winner [board]
+  	(first 
+  	  (filter #{"X" "O"} 
+  	    (map winner-in-given-combination (winning-combinations board)))))
