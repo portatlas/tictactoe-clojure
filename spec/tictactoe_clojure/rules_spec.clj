@@ -6,6 +6,16 @@
   (with new-board [0 1 2 3 4 5 6 7 8])
   (with x-win-top-row-board ["X" "X" "X" "O" "O" 5 6 7 8])
   (with board-with-draw ["X" "O" "X" "O" "O" "X" "X" "X" "O"])
+
+  (describe "#valid-move?"
+    (it "returns true if the position is availabe in the board"
+      (should= true (valid-move?  1  @new-board)))
+    (it "returns false if the position is not availabe in the board"
+      (should= false (valid-move?  0  [1 2 3 4 5 6 7 8])))
+    (it "returns false if the position supplied is out of range"
+      (should= false (valid-move?  16  @new-board)))
+    (it "returns false if the position supplied is not a number"
+      (should= false (valid-move?  "X" @new-board))))
 	    
   (describe "winning-configurations"
   	(it "should return the rows, columns, and diagonals"
@@ -14,9 +24,9 @@
                  (0 4 8)(2 4 6)) (winning-combinations @new-board))))
 
   (describe "winner-in-given-combination"
-  	(it "should return X if the symbol X occupied in all three spots in the combinationn"
+  	(it "should return X if the symbol X occupied in all three spots in the combination"
   		(should= "X" (winner-in-given-combination '("X" "X" "X"))))
-  	(it "should return O if the symbol O occupied in all three spots in the combinationn"
+  	(it "should return O if the symbol O occupied in all three spots in the combination"
   		(should= "O" (winner-in-given-combination '("O" "O" "O"))))
   	(it "should return nil if there is not one symbol occupying all three spots in the combinationn"
   		(should= nil (winner-in-given-combination '(0 "X" "O")))))

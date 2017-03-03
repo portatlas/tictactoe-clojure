@@ -23,14 +23,6 @@
   	[board]
       (filter integer? board))
 
-  (defn valid-move?
-    [position board]
-      (if (some #(= position %) (valid-slots board))
-  	    true 
-  	    false))
-
   (defn move 
   	[board position mark]
-      (if (valid-move? position board )
-        (assoc new-board position mark)
-	      "Invalid Move"))
+      (assoc new-board position mark))

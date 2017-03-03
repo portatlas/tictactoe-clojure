@@ -1,6 +1,12 @@
 (ns tictactoe-clojure.rules
   (:require [tictactoe-clojure.board :as board]))
 
+  (defn valid-move?
+    [position board]
+      (if (some #(= position %) (board/valid-slots board))
+        true 
+        false))
+
   (defn winning-combinations
   	[board]
   	  (concat
