@@ -1,5 +1,7 @@
 (ns tictactoe-clojure.rules
   (:require [tictactoe-clojure.board :as board]))
+  
+  (def instructions "Two players take turns placing a 'X' and 'O' respectively on a 3 x 3 grid. The player who succeeds in placing three of their symbols in a horizontal, vertical or diagonal row wins.")
 
 (defn valid-move?
   [position board]

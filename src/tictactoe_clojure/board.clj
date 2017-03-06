@@ -1,6 +1,6 @@
 (ns tictactoe-clojure.board)
 
-(def new-board [0 1 2 3 4 5 6 7 8])
+(def new-board [1 2 3 4 5 6 7 8 9])
 
 (defn board-rows
   [board]
@@ -23,6 +23,6 @@
   [board]
     (filter integer? board))
 
-(defn move 
-  [board position mark]
-    (assoc new-board position mark))
+  (defn move 
+  	[board position mark]
+      (assoc new-board (dec position) mark))

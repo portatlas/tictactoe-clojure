@@ -11,16 +11,16 @@
 
   (describe "#prompt"
     (it "prints the message to the screen and ask user for input"
-      (should= "0"
-        (with-in-str "0"
+      (should= "1"
+        (with-in-str "1"
           (prompt "Enter position on the board")))))
 
   (describe "#show-board"
     (it "prints an empty board to the screen"
-      (should= "0 | 1 | 2\n---------\n3 | 4 | 5\n---------\n6 | 7 | 8\n"
+      (should= "1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n"
         (with-out-str
-          (show-board [0 1 2 3 4 5 6 7 8]))))
+          (show-board [1 2 3 4 5 6 7 8 9]))))
     (it "prints an board with symbols to the screen"
-      (should= "X | 1 | O\n---------\n3 | 4 | X\n---------\n6 | 7 | 8\n"
+      (should= "X | 2 | O\n---------\n4 | 5 | X\n---------\n7 | 8 | 9\n"
         (with-out-str
-          (show-board ["X" 1 "O" 3 4 "X" 6 7 8]))))))
+          (show-board ["X" 2 "O" 4 5 "X" 7 8 9]))))))
