@@ -1,10 +1,17 @@
 (ns tictactoe-clojure.rules-spec
-	(:require [speclj.core :refer :all]
-		[tictactoe-clojure.rules :refer :all]))
+  (:require [speclj.core :refer :all]
+            [tictactoe-clojure.rules :refer :all]))
 
 (describe "tictactoe-clojure.rules"
   (with new-board [0 1 2 3 4 5 6 7 8])
-  (with x-win-top-row-board ["X" "X" "X" "O" "O" 5 6 7 8])
+  (with x-win-1st-row-board ["X" "X" "X" "O" "O" 5 6 7 8])
+  (with o-win-2nd-row-board ["X" 1 "X" "O" "O" "O" 6 7 8])
+  (with x-win-3rd-row-board ["X" 1 "X" "O" 4 "O" "X" "X" "X"])
+  (with o-win-1st-column-board ["O" 1 "X" "O" 4 "X" "O" "X" "X"])
+  (with x-win-2nd-column-board ["O" "X" "X" 3 "X" "X" "O" "X" 8])
+  (with o-win-3rd-column-board [0 "X" "O" 3 4 "O" "O" "X" "O"])
+  (with x-win-1st-diagonal-board ["X" 1 "O" 3 "X" "O" "O" 7 "X"])
+  (with o-win-2nd-diagonal-board ["X" 1 "O" 3 "O" "X" "O" 7 "X"])
   (with board-notfull-nowinner ["X" 1 "X" "O" "O" 5 6 7 8])
   (with board-with-draw ["X" "O" "X" "O" "O" "X" "X" "X" "O"])
 
@@ -19,28 +26,28 @@
       (should= false (valid-move?  "X" @new-board))))
 	    
   (describe "winning-combinations"
-  	(it "should return the rows, columns, and diagonals"
-  		(should= '((0 1 2)(3 4 5)(6 7 8)
+    (it "should return the rows, columns, and diagonals"
+      (should= '((0 1 2)(3 4 5)(6 7 8)
                  (0 3 6)(1 4 7)(2 5 8)
                  (0 4 8)(2 4 6)) (winning-combinations @new-board))))
 
   (describe "winner"
-  	(it "should return X if X is a winner in the first row"
-  		(should= "X" (winner @x-win-top-row-board)))
-  	(it "should return O if O is a winner in the second row"
-  		(should= "O" (winner ["X" 1 "X" "O" "O" "O" 6 7 8])))
-  	(it "should return X if X is a winner in the third row"
-  		(should= "X" (winner ["X" 1 "X" "O" 4 "O" "X" "X" "X"])))
-  	(it "should return O if O is a winner in the first column"
-  		(should= "O" (winner ["O" 1 "X" "O" 4 "X" "O" "X" "X"])))
-  	(it "should return X if X is a winner in the second column"
-  		(should= "X" (winner ["O" "X" "X" 3 "X" "X" "O" "X" 8])))
-  	(it "should return O if O is a winner in the third column"
-  		(should= "O" (winner [0 "X" "O" 3 4 "O" "O" "X" "O"])))	
-  	(it "should return X if X is a winner in the first diagonal"
-  		(should= "X" (winner ["X" 1 "O" 3 "X" "O" "O" 7 "X"]))) 	
-  	(it "should return O if O is a winner in the second diagonal"
-  		(should= "O" (winner ["X" 1 "O" 3 "O" "X" "O" 7 "X"])))
+    (it "should return X if X is a winner in the first row"
+      (should= "X" (winner @x-win-1st-row-board)))
+    (it "should return O if O is a winner in the second row"
+      (should= "O" (winner @o-win-2nd-row-board)))
+    (it "should return X if X is a winner in the third row"
+      (should= "X" (winner @x-win-3rd-row-board)))
+    (it "should return O if O is a winner in the first column"
+      (should= "O" (winner @o-win-1st-column-board)))
+    (it "should return X if X is a winner in the second column"
+      (should= "X" (winner @x-win-2nd-column-board)))
+    (it "should return O if O is a winner in the third column"
+      (should= "O" (winner @o-win-3rd-column-board)))	
+    (it "should return X if X is a winner in the first diagonal"
+      (should= "X" (winner @x-win-1st-diagonal-board)))
+    (it "should return O if O is a winner in the second diagonal"
+      (should= "O" (winner @o-win-2nd-diagonal-board)))
     (it "should return nil if the board is not full and there is no winner"
       (should= nil (winner @board-notfull-nowinner)))
     (it "should return nil if there is no winner"
@@ -58,7 +65,7 @@
 
   (describe "game-over?"
     (it "should return true if there is a winner"
-      (should= true (game-over? @x-win-top-row-board)))
+      (should= true (game-over? @x-win-1st-row-board)))
     (it "should return true if the result is a draw"
       (should= true (game-over? @board-with-draw)))
     (it "should return false if the board is empty"
