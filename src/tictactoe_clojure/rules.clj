@@ -14,7 +14,7 @@
   	  	(board/board-columns board)
   	  	(board/board-diagonals board)))
 
-  (defn winner-in-given-combination 
+  (defn- winner-in-given-combination 
     [combination]
   	  (if (every? #{"X"} combination) "X"
   	    (if (every? #{"O"} combination) "O")))
