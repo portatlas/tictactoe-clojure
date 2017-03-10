@@ -1,20 +1,30 @@
 (ns tictactoe-clojure.game
   (:require [tictactoe-clojure.board :as board])	
+  (:require [tictactoe-clojure.human-player :as human-player])
+  (:require [tictactoe-clojure.computer-player :as computer-player])
   (:require [tictactoe-clojure.console :as console])	
   (:require [tictactoe-clojure.rules :as rules]))
 
-(defn- to-int
-  [string]
-    (Integer. (re-find #"[0-9]*" string)))
+(defn take-two-moves
+  [board current-turn]
+    (let [board board]
+      (console/display (str current-turn "'s turn"))
+      (if (= current-turn "O")
+        (board/move board (human-player/human-move board) "O") 
+        (board/move board (computer-player/optimal-move board 9) "X"))))
 
-(defn take-move
-	[board]
-    (let [user-move (to-int (console/prompt "Enter your position"))]
-      (if (rules/valid-move? user-move board)
-	      (board/move board user-move "X")
-        ("Invalid Move"))))
+(defn show-result
+  [played-board]
+    (if (rules/draw? played-board)
+      (console/display "Its a draw")
+      (console/display (str (rules/winner played-board) " wins!"))))
 
-(defn start-game
+(defn play-game 
   [board]
-    (console/display rules/instructions)
-    (console/show-board board))
+    (loop [board board player-sequence player-sequence]
+      (console/display (board/stringify-board-to-grid board))
+        (if (rules/game-over? board)
+          (show-result board)
+          (recur
+            (take-two-moves board turn)
+            (rules/whose-turn turn )))))

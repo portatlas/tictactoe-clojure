@@ -1,4 +1,5 @@
-(ns tictactoe-clojure.console)
+(ns tictactoe-clojure.console
+  (:require [tictactoe-clojure.rules :as rules]))
 
 (defn display 
   [message]
@@ -8,12 +9,18 @@
   [message]
     (println message)
     (read-line))
+<<<<<<< HEAD
+=======
 
-(defn show-board
-  [board]
-    (display (str (nth board 0) " | " (nth board 1) " | " (nth board 2)))
-    (display (str "---------"))
-    (display (str (nth board 3) " | " (nth board 4) " | " (nth board 5)))
-    (display (str "---------"))
-    (display (str (nth board 6) " | " (nth board 7) " | " (nth board 8))))
- 
+(defn- to-int
+  [string]
+    (Integer. (re-find #"[0-9]*" string)))
+
+(defn prompt-user-move
+  [message current-board]
+    (let [user-move (to-int (prompt [message]))]
+      (if (rules/valid-move? user-move current-board)
+        user-move
+        "Invalid Input. Please try again."))
+    )
+>>>>>>> 842f7a5... Update the index of the board to one, and a function to handle user inputs

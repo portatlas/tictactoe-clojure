@@ -8,18 +8,18 @@
   (with played-board ["X" "O" "O" "X" 5 6 7 8 9])
 
   (describe "new-board"
-    (it "returns a vector with a range from 0 to 8"
+    (it "returns a vector with a range from 1 to "
       (should= new-board @empty-board )))
 
   (describe "#board-rows"
     (it "should return the three rows of an empty board"
       (should= '((1 2 3)(4 5 6)(7 8 9)) (board-rows @empty-board)))
-	  (it "should return the three rows of the board with the corresponding symbols"
-	    (should= '(("X" "O" "O")("X" 5 6)(7 8 9)) (board-rows @played-board))))
+    (it "should return the three rows of the board with the corresponding symbols"
+      (should= '(("X" "O" "O")("X" 5 6)(7 8 9)) (board-rows @played-board))))
 
   (describe "board-columns"
-	  (it "should return the three columns of an empty board"
-	    (should= '((1 4 7)(2 5 8)(3 6 9)) (board-columns @empty-board)))
+    (it "should return the three columns of an empty board"
+      (should= '((1 4 7)(2 5 8)(3 6 9)) (board-columns @empty-board)))
     (it "should return the three columns of the board with the corresponding symbols"
       (should= '(("X" "X" 7)("O" 5 8)("O" 6 9)) (board-columns @played-board))))
 
@@ -43,4 +43,11 @@
     (it "returns a board with the move applied to the first spot with the symbol X"
       (should= @x-on-1-board (move new-board 1 "X")))
     (it "returns a board with the move applied to the last spot with the symbol 0"
-      (should= [1 2 3 4 5 6 7 8 "O"] (move new-board 9 "O")))))
+      (should= [1 2 3 4 5 6 7 8 "O"] (move new-board 9 "O")))
+    (it "returns a board with an X on 1 and an O on 2"
+      (should= ["X" "O" 3 4 5 6 7 8 9] (move (move new-board 1 "X") 2 "O"))))
+
+  (describe "#stringify-board-to-grid"
+    (it "converts a board vector into a string "
+      (should= "1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n"
+          (stringify-board-to-grid @empty-board)))))
