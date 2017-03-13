@@ -9,13 +9,13 @@
       true 
       false))
 
-(defn whose-turn
+(defn switch-turn
   [recent-turn]
     (if (= recent-turn "X")
       "O"
       "X"))
 
-(defn winning-combinations
+(defn- winning-combinations
   [board]
     (concat
       (board/board-rows board)
@@ -44,3 +44,9 @@
     (if (or (= (draw? board) true) (not= (winner board) nil))
       true
       false))
+
+(defn game-result
+  [board]
+    (if (draw? board)
+      "Its a draw"
+      (str "Player " (winner board) " wins")))

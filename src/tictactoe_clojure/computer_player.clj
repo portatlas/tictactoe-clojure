@@ -9,7 +9,7 @@
 
 (declare score-board)
 
-(defn optimal-move-by-score 
+(defn- optimal-move-by-score 
   [player board depth maximum]
     (let [possible-moves (board/valid-slots board)
           score-of-possible-move (map #(score-board player (board/move board % player) depth maximum) possible-moves)
@@ -19,25 +19,23 @@
         (last sorted-move-scores-pair)
         (first sorted-move-scores-pair))))
 
-(defn score-board 
+(defn- score-board 
   [player board depth maximum]
     (cond 
       (= (rules/draw? board) true) 0
-  	  (= (rules/winner board) player) 
-  	    (if maximum 
-  	  	  (- 10 depth) 
-  	  	  (+ -10 depth))
-      (= (rules/winner board) (rules/whose-turn player)) 
+      (= (rules/winner board) player) 
+        (if maximum 
+          (- 10 depth) 
+          (+ -10 depth))
+      (= (rules/winner board) (rules/switch-turn player)) 
         (if maximum 
       	  (+ -10 depth) 
       	  (- 10 depth))
       :else 
         (second 
-          (optimal-move-by-score (rules/whose-turn player) board (dec depth) (not maximum)))))
+          (optimal-move-by-score (rules/switch-turn player) board (dec depth) (not maximum)))))
 
 (defn optimal-move 
-  [board depth]
-    (do
-      (console/display "Computer's move:")
-      (first 
-        (optimal-move-by-score "X" board depth true))))
+  [player board depth]
+    (first 
+      (optimal-move-by-score player board depth true)))

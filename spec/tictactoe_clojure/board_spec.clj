@@ -8,7 +8,7 @@
   (with played-board ["X" "O" "O" "X" 5 6 7 8 9])
 
   (describe "new-board"
-    (it "returns a vector with a range from 1 to "
+    (it "returns a vector with a range from 1 to 9"
       (should= new-board @empty-board )))
 
   (describe "#board-rows"
@@ -42,12 +42,14 @@
   (describe "#move"
     (it "returns a board with the move applied to the first spot with the symbol X"
       (should= @x-on-1-board (move new-board 1 "X")))
-    (it "returns a board with the move applied to the last spot with the symbol 0"
+    (it "returns a board with the move applied to the last spot with the symbol O"
       (should= [1 2 3 4 5 6 7 8 "O"] (move new-board 9 "O")))
     (it "returns a board with an X on 1 and an O on 2"
-      (should= ["X" "O" 3 4 5 6 7 8 9] (move (move new-board 1 "X") 2 "O"))))
+      (should= ["X" "O" 3 4 5 6 7 8 9] (move (move new-board 1 "X") 2 "O")))
+    (it "returns the board with out the move applied if the move input is out of bounds"
+      (should= [1 2 3 4 5 6 7 8 9] (move new-board 10 "O"))))
 
   (describe "#stringify-board-to-grid"
     (it "converts a board vector into a string "
       (should= "1 | 2 | 3\n---------\n4 | 5 | 6\n---------\n7 | 8 | 9\n"
-          (stringify-board-to-grid @empty-board)))))
+        (stringify-board-to-grid @empty-board)))))
