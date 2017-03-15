@@ -1,5 +1,7 @@
 (ns tictactoe-clojure.rules
   (:require [tictactoe-clojure.board :as board]))
+  
+(def instructions "TicTacToe: Two players take turns placing a 'X' and 'O' respectively on a 3 x 3 grid. The player who succeeds in placing three of their symbols in a horizontal, vertical or diagonal row wins.")
 
 (defn valid-move?
   [position board]
@@ -7,7 +9,13 @@
       true 
       false))
 
-(defn winning-combinations
+(defn switch-turn
+  [recent-turn]
+    (if (= recent-turn "X")
+      "O"
+      "X"))
+
+(defn- winning-combinations
   [board]
     (concat
       (board/board-rows board)
@@ -36,3 +44,9 @@
     (if (or (= (draw? board) true) (not= (winner board) nil))
       true
       false))
+
+(defn game-result
+  [board]
+    (if (draw? board)
+      "Its a draw"
+      (str "Player " (winner board) " wins")))
