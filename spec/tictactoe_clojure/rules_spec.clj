@@ -14,6 +14,9 @@
   (with o-win-2nd-diagonal-board ["X" 2 "O" 4 "O" "X" "O" 8 "X"])
   (with board-notfull-nowinner ["X" 2 "X" "O" "O" 6 7 8 9])
   (with board-with-draw ["X" "O" "X" "O" "O" "X" "X" "X" "O"])
+  (with first-player #tictactoe_clojure.player.Human{:piece "X"} )
+  (with second-player #tictactoe_clojure.player.Human{:piece "O"})
+  (with players [@first-player @second-player])
 
   (describe "#valid-move?"
     (it "returns true if the position is available in the board"
@@ -30,6 +33,12 @@
       (should= "O" (switch-turn "X")))
     (it "returns the mark for O if X was the most recent turn"
       (should= "X" (switch-turn "O"))))	    
+
+  (describe "#switch-player"
+    (it "return the second player in the vector if the first player went"
+      (should= @second-player (switch-player @players @first-player)))
+    (it "return the first player in the vector if the second player went"
+      (should= @first-player (switch-player @players @second-player))))   
 
   (describe "winner"
     (it "should return X if X is a winner in the first row"

@@ -12,5 +12,5 @@
   (describe "#prompt"
     (it "prints the message to the screen and ask user for input"
       (should= "1"
-        (with-in-str "1"
-          (prompt "Enter position on the board"))))))
+        (with-in-str "1"      
+          (prompt (with-out-str "Enter position on the board")))))))
