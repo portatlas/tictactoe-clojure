@@ -20,12 +20,12 @@
     (second players)
     (first players)))
 
-(defn- winning-combinations
+(defn winning-combinations
   [board]
     (concat
-      (board/board-rows board)
-      (board/board-columns board)
-      (board/board-diagonals board)))
+      (board/board-rows board (board/board-size board))
+      (board/board-columns board (board/board-size board))
+      (board/board-diagonals board (board/board-size board))))
 
 (defn- winner-in-given-combination 
   [combination]
@@ -43,6 +43,8 @@
     (if (and (= (board/valid-slots board) []) (= (winner board) nil))
       true 
       false))
+
+(def memo-draw? (memoize draw?))
 
 (defn game-over?
   [board]

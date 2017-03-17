@@ -1,4 +1,5 @@
 (ns tictactoe-clojure.player
+  (:require [tictactoe-clojure.board :as board])
   (:require [tictactoe-clojure.human-player :as human-player])
   (:require [tictactoe-clojure.computer-player :as computer-player]))
 
@@ -16,7 +17,8 @@
   Player
   (piece [this] (:piece this))
   (move [this board]
-    (computer-player/optimal-move (:piece this) board 9)))
+    (time 
+      (computer-player/optimal-move (:piece this) board 9))))
 
 (defn create-player [player piece]
   (cond 

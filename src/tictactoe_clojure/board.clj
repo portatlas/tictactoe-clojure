@@ -1,36 +1,74 @@
-(ns tictactoe-clojure.board)
+(ns tictactoe-clojure.board
+  (:require [tictactoe-clojure.console :as console])
+  (:require [clojure.math.numeric-tower :as math]))
 
-(def new-board [1 2 3 4 5 6 7 8 9])
+(defn board-size
+  [board]
+    (math/sqrt (count board)))
+
+(defn new-board 
+  [size]
+    (vec (range 1 (inc (* size size)))))
 
 (defn board-rows
-  [board]
-    (partition 3 board))
+  [board size]
+    (partition size board))
 
 (defn board-columns
-  [board]
-    (list 
-      (take-nth 3 board)
-      (take-nth 3 (drop 1 board))
-      (take-nth 3 (drop 2 board))))
+  [board size]
+    (take size
+      (list 
+        (take-nth size board)
+        (take-nth size (drop 1 board))
+        (take-nth size (drop 2 board))
+        (take-nth size (drop 3 board))
+        (take-nth size (drop 4 board)))))
+
+(defn- first-board-diagonal
+  [board size]
+    (take-nth (inc size) board))
+
+(defn- second-board-diagonal
+  [board size]
+    (take-nth (dec size) 
+      (drop-last (dec size) 
+      (drop (dec size) board))))
 
 (defn board-diagonals
-  [board]
+  [board size]
     (list 
-      (take-nth 4 board)
-        (drop 1 (drop-last (take-nth 2 board)))))
+      (first-board-diagonal board size)
+      (second-board-diagonal board size)))
 
 (defn valid-slots 
   [board]
     (filter integer? board))
 
+(def memo-valid-slots (memoize valid-slots))
+
 (defn move 
   [board position mark]
     (replace {position mark} board))
 
-(defn stringify-board-to-grid
+(defn- add-space 
+  [numchar]
+    (if (= (count (str numchar)) 1)
+      (str numchar " ") 
+      numchar))
+
+(defn- column-padding 
+  [row size]
+    (if (> size 3)
+      (str " " (clojure.string/join " | " (map add-space row)) " ")
+      (str " " (clojure.string/join " | " row) " ")))
+
+(defn- row-padding
+  [string]
+    (str "\n" (clojure.string/join (repeat (count (first string)) "-")) "\n"))
+
+(defn stringify-board-to-grid 
   [board]
-    (str (nth board 0) " | " (nth board 1) " | " (nth board 2)
-    "\n---------\n"
-    (nth board 3) " | " (nth board 4) " | " (nth board 5)
-    "\n---------\n"
-    (nth board 6) " | " (nth board 7) " | " (nth board 8) "\n"))
+    (let [size (board-size board)]
+      (let [rows (map #(column-padding % size) (partition size board))
+            divider (row-padding rows)]
+        (clojure.string/join divider rows))))

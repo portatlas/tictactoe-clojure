@@ -19,7 +19,7 @@
     (it "has an associated piece to place on the board"
       (should= "X" (:piece #tictactoe_clojure.player.Computer{:piece "X"})))
     (it "has an method to move"
-      (with-redefs [(computer-player/optimal-move  "X" ["X" "X" "O" "O" 5 6 7 8 "X"] 1)]
+      (with-redefs [(computer-player/optimal-move  "X" @x-one-move-from-win 1)]
         (should= 7 (move #tictactoe_clojure.player.Computer{:piece "X"} @x-one-move-from-win)))))
 
   (describe "create-player"

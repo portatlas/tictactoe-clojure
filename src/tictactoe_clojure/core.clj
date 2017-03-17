@@ -9,5 +9,6 @@
   []
     (console/display rules/instructions)
       (let [vs-type (game-setup/opponent-type)
-            match (game-setup/matchup-opponents vs-type)]
-        (game/play-game match board/new-board)))
+            match (game-setup/matchup-opponents vs-type)
+            board-size (game-setup/get-board-size)]
+        (game/play-game match (board/new-board board-size))))
