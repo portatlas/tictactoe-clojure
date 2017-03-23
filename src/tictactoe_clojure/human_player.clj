@@ -1,5 +1,6 @@
 (ns tictactoe-clojure.human-player
   (:require [tictactoe-clojure.console :as console])	
+  (:require [tictactoe-clojure.stringify-msg :as stringify-msg])	
   (:require [tictactoe-clojure.rules :as rules]))
 
 (defn- to-int
@@ -17,5 +18,5 @@
       (if (rules/valid-move? user-move board)
         user-move
         (do 
-          (console/display "Invalid Input. Please try again.")
+          (console/display stringify-msg/invalid-input)
           (human-move board)))))

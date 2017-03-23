@@ -24,11 +24,11 @@
         (take-nth size (drop 3 board))
         (take-nth size (drop 4 board)))))
 
-(defn- first-board-diagonal
+(defn- lefttoright-diagonal
   [board size]
     (take-nth (inc size) board))
 
-(defn- second-board-diagonal
+(defn- righttoleft-diagonal
   [board size]
     (take-nth (dec size) 
       (drop-last (dec size) 
@@ -37,8 +37,8 @@
 (defn board-diagonals
   [board size]
     (list 
-      (first-board-diagonal board size)
-      (second-board-diagonal board size)))
+      (lefttoright-diagonal board size)
+      (righttoleft-diagonal board size)))
 
 (defn valid-slots 
   [board]
@@ -66,7 +66,7 @@
   [string]
     (str "\n" (clojure.string/join (repeat (count (first string)) "-")) "\n"))
 
-(defn stringify-board-to-grid 
+(defn transform-to-grid 
   [board]
     (let [size (board-size board)]
       (let [rows (map #(column-padding % size) (partition size board))

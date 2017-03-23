@@ -15,10 +15,11 @@
       "O"
       "X"))
 
-(defn switch-player [players current-player]
-  (if (= (first players) current-player)
-    (second players)
-    (first players)))
+(defn switch-player 
+  [players current-player]
+    (if (= (first players) current-player)
+      (second players)
+      (first players)))
 
 (defn winning-combinations
   [board]
@@ -44,16 +45,8 @@
       true 
       false))
 
-(def memo-draw? (memoize draw?))
-
 (defn game-over?
   [board]
     (if (or (= (draw? board) true) (not= (winner board) nil))
       true
       false))
-
-(defn game-result
-  [board]
-    (if (draw? board)
-      "Its a draw"
-      (str "Player " (winner board) " wins")))

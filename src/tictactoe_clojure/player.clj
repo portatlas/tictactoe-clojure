@@ -17,8 +17,7 @@
   Player
   (piece [this] (:piece this))
   (move [this board]
-    (time 
-      (computer-player/optimal-move (:piece this) board 9))))
+    (computer-player/optimal-move (:piece this) board 9)))
 
 (defn create-player [player piece]
   (cond 
