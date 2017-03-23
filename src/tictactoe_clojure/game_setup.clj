@@ -1,4 +1,5 @@
 (ns tictactoe-clojure.game-setup
+  (:require [tictactoe-clojure.stringify-msg :as stringify-msg]) 
   (:require [tictactoe-clojure.player :as player])  
   (:require [tictactoe-clojure.console :as console]))
 
@@ -10,7 +11,9 @@
       (= size "4") 4
       (= size "5") 5
       :else
-        (get-board-size))))
+        (do
+          (console/display stringify-msg/invalid-input)
+          (get-board-size)))))
 
 (declare opponent-sequence)
 
@@ -23,7 +26,7 @@
         (opponent-sequence)
       :else
         (do
-          (console/display "Invalid Input. Please try again.")
+          (console/display stringify-msg/invalid-input)
           (opponent-type)))))
 
 (defn- opponent-sequence []
@@ -33,7 +36,7 @@
       (= sequence "2") ["Computer" "Human"]
       :else
         (do
-          (console/display "Invalid Input. Please try again.")
+          (console/display stringify-msg/invalid-input)
           (opponent-sequence)))))
 
 (defn matchup-opponents 

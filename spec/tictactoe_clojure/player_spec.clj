@@ -6,24 +6,26 @@
 
 (describe "tictactoe-clojure.player"
   (with empty-board [1 2 3 4 5 6 7 8 9])
-  (with x-one-move-from-win ["X" "X" "O" "O" "X" 6 7 "O" "O"])
+  (with o-one-move-from-win ["X" "X" "O" "O" "X" 6 7 "O" "O"])
+  (with human-x (create-player "Human" "X"))
+  (with computer-o (create-player "Computer" "O"))
 
   (describe "Human"
     (it "has an associated piece to place on the board"
-      (should= "X" (:piece #tictactoe_clojure.player.Human{:piece "X"})))
+      (should= "X" (:piece @human-x)))
     (it "has an method to move"
       (with-redefs [human-player/human-move (fn [_] 1)]
-        (should= 1 (move #tictactoe_clojure.player.Human{:piece "X"} @empty-board)))))
+        (should= 1 (move @human-x @empty-board)))))
 
   (describe "Computer"
     (it "has an associated piece to place on the board"
-      (should= "X" (:piece #tictactoe_clojure.player.Computer{:piece "X"})))
+      (should= "O" (:piece @computer-o)))
     (it "has an method to move"
-      (with-redefs [(computer-player/optimal-move  "X" @x-one-move-from-win 1)]
-        (should= 7 (move #tictactoe_clojure.player.Computer{:piece "X"} @x-one-move-from-win)))))
+      (with-redefs [(computer-player/optimal-move  "X" @o-one-move-from-win 1)]
+        (should= 7 (move @computer-o @o-one-move-from-win)))))
 
   (describe "create-player"
-    (it "returns an instance of a Human player when instructed"
-      (should= #tictactoe_clojure.player.Human{:piece "X"}  (create-player "Human" "X")))
-    (it "returns an instance of a Computer player when instructed"
-      (should= #tictactoe_clojure.player.Computer{:piece "O"}  (create-player "Computer" "O")))))
+    (it "returns an instance of a Human player"
+      (should= @human-x  (create-player "Human" "X")))
+    (it "returns an instance of a Computer player"
+      (should= @computer-o  (create-player "Computer" "O")))))
