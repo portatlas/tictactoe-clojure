@@ -2,12 +2,13 @@
   (:require [speclj.core :refer :all]
             [tictactoe-clojure.game-setup :refer :all]
             [tictactoe-clojure.console :as console]
-            [tictactoe-clojure.player :as player]))
+            [tictactoe-clojure.player :as player]
+            [tictactoe-clojure.symbol :refer :all]))
 
 (describe "tictactoe-clojure.game-setup"
-  (with human-player-X (player/create-player "Human" "X"))
-  (with human-player-O (player/create-player "Human" "O"))
-  (with computer-player-O (player/create-player "Computer" "O"))
+  (with human-player-X (player/create-player "Human" X))
+  (with human-player-O (player/create-player "Human" O))
+  (with computer-player-O (player/create-player "Computer" O))
 
   (describe "#get-board-size"
     (it "returns 3 if the user selects a 3x3 board"

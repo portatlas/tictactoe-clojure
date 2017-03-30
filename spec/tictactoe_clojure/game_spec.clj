@@ -5,14 +5,15 @@
             [tictactoe-clojure.player :as player]
             [tictactoe-clojure.stringify-msg :as stringify-msg]
             [tictactoe-clojure.console :as console]
-            [tictactoe-clojure.game :refer :all]))
+            [tictactoe-clojure.game :refer :all]
+            [tictactoe-clojure.symbol :refer :all]))
 
 (describe "tictactoe-clojure.game"
   (with new-board [1 2 3 4 5 6 7 8 9])
-  (with x-win-board ["X" "X" "X" 4 "O" 6 7 8 "O"])
-  (with x-1-move-from-win-board [1 "X" "X" 4 "O" 6 "X" "X" 9])
-  (with human-x (player/create-player "Human" "X"))
-  (with human-o (player/create-player "Human" "O"))
+  (with x-win-board [X X X 4 O 6 7 8 O])
+  (with x-1-move-from-win-board [1 X X 4 O 6 X X 9])
+  (with human-x (player/create-player "Human" X))
+  (with human-o (player/create-player "Human" O))
   (with players [@human-x @human-o])
 
   (describe "#play-game"

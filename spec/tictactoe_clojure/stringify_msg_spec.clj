@@ -2,16 +2,17 @@
   (:require [speclj.core :refer :all]
   	    [tictactoe-clojure.player :as player]
             [tictactoe-clojure.rules :as rules]
-            [tictactoe-clojure.stringify-msg :refer :all]))
+            [tictactoe-clojure.stringify-msg :refer :all]
+            [tictactoe-clojure.symbol :refer :all]))
 
 (describe "tictactoe-clojure.stringify-msg"
   (with empty-3x3-board [1 2 3 4 5 6 7 8 9])
-  (with board-with-draw ["X" "O" "X" "O" "O" "X" "X" "X" "O"])
-  (with x-win-1st-row-board ["X" "X" "X" "O" "O" 6 7 8 9])
-  (with o-win-2nd-row-board ["X" 2 "X" "O" "O" "O" 7 8 9])
+  (with board-with-draw [X O X O O X X X O])
+  (with x-win-1st-row-board [X X X O O 6 7 8 9])
+  (with o-win-2nd-row-board [X 2 X O O O 7 8 9])
   (with empty-4x4-board [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16])
   (with empty-5x5-board [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25])
-  (with human-x (player/create-player "Human" "X"))
+  (with human-x (player/create-player "Human" X))
 
   (describe "#invalid-input"
     (it "returns a string Invalid Input. Please try again."
