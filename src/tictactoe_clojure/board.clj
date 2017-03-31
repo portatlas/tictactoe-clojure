@@ -16,13 +16,9 @@
 
 (defn board-columns
   [board size]
-    (take size
-      (list 
-        (take-nth size board)
-        (take-nth size (drop 1 board))
-        (take-nth size (drop 2 board))
-        (take-nth size (drop 3 board))
-        (take-nth size (drop 4 board)))))
+    (for [col-num (range size)]
+      (take size
+        (take-nth size (drop col-num board)))))
 
 (defn- lefttoright-diagonal
   [board size]
