@@ -27,7 +27,7 @@
     (it "prompts the user to select an opponent, if the user select 1, return a vector of Human Human"
       (with-redefs [console/prompt (fn [_] "1")]
         (should= ["Human" "Human"] (opponent-type))))
-    (it "prompts the user to select who goes first, if user select 1, return a vector of Human Computer"
+    (it "prompts the user to select who goes first, if user select 2, return a vector of Human Computer"
       (with-out-str (with-in-str "2\n1\n"
         (should= ["Human" "Computer"] (opponent-type)))))
     (it "prompts the user to select who goes first, if user select 2, return a vector of Computer Human"
