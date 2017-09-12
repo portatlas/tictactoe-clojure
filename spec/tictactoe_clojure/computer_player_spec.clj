@@ -1,15 +1,39 @@
 (ns tictactoe-clojure.computer-player-spec
   (:require [speclj.core :refer :all]
-            [tictactoe-clojure.computer-player :refer :all]))
+            [tictactoe-clojure.board :as board]
+            [tictactoe-clojure.computer-player :refer :all]
+            [tictactoe-clojure.symbol :refer :all]))
 
 (describe "tictactoe-clojure.computer-player"
-  (with x-1-move-from-win ["O" 2 3 "X" "X" 6 7 8 9])
-  (with o-1-move-from-win ["O" "O" 3 4 5 "X" 7 8 "X"])
+  (context "3x3 Board"
+    (describe "#optimal-move"
+      (it "makes a winning move for X"
+        (should= 1 (optimal-move X [1 X X O O 6 7 8 9])))
+      (it "makes a blocking move for X"
+        (should= 1 (optimal-move X [1 O O 4 X 6 X 8 X])))
+      (it "makes a winning move for O"
+        (should= 9 (optimal-move O [1 X X 4 X 6 O O 9])))
+      (it "makes a blocking move for O"
+        (should= 9 (optimal-move O [X O O O 5 X X X 9])))))
 
-  (describe "#optimal-move"
-    (it "moves to the spot with the neutral score if no winning or blocking position are available"
-      (should= 5 (optimal-move "O" ["X" 2 3 4 5 6 7 8 9] 1)))
-    (it "blocks a move that would allow the opponent to win"
-      (should= 6 (optimal-move "O" @x-1-move-from-win 1)))
-    (it "makes a winning move"
-      (should= 3 (optimal-move "O" @o-1-move-from-win 5)))))
+  (context "4x4 Board"
+    (describe "#optimal-move"
+      (it "makes a winning move for X"
+        (should= 1 (optimal-move X [1 X X X O O O 8 9 10 11 12 13 14 15 16])))
+      (it "makes a blocking move for X"
+        (should= 1 (optimal-move X [1 O O O X 6 X 8 X 10 11 X 13 14 15 16])))
+      (it "makes a winning move for O"
+        (should= 6 (optimal-move O [1 X X 4 O 6 O O 9 10 11 X 13 14 15 16])))
+      (it "makes a blocking move for O"
+        (should= 5 (optimal-move O [X O O O 5 X X X 9 10 11 12 X 14 15 16])))))
+
+  (context "5x5 Board"
+    (describe "#optimal-move"
+      (it "makes a winning move for X"
+        (should= 1 (optimal-move X [1 X X X X O O O O 10 11 12 X 14 15 O 17 18 X 20 21 O 23 24 25])))
+      (it "makes a blocking move for X"
+        (should= 1 (optimal-move X [1 O O O X O X O X 10 11 X 13 O 15 16 X 18 19 20 21 22 23 24 25])))
+      (it "makes a winning move for O"
+        (should= 6 (optimal-move O [X X X 4 O 6 O O O O 11 X 13 14 15 X 17 18 X 20 21 X 23 24 25])))
+      (it "makes a blocking move for O"
+        (should= 10 (optimal-move O [X O O O 5 X X X X 10 11 12 X 14 15 16 17 O 19 20 O 22 O 24 25]))))))

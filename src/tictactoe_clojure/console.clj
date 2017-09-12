@@ -1,5 +1,4 @@
-(ns tictactoe-clojure.console
-  (:require [tictactoe-clojure.rules :as rules]))
+(ns tictactoe-clojure.console)
 
 (defn display 
   [message]

@@ -4,13 +4,13 @@
 
 (describe "tictactoe-clojure.console"
   (describe "#display"
-    (it "print message to the screen"
+    (it "prints the message to the screen"
       (should= "Welcome to Tic Tac Toe\n"
         (with-out-str
           (display "Welcome to Tic Tac Toe")))))
 
   (describe "#prompt"
-    (it "prints the message to the screen and ask user for input"
+    (it "prints the message to the screen and ask the user for an input"
       (should= "1"
-        (with-in-str "1"
-          (prompt "Enter position on the board"))))))
+        (with-in-str "1"      
+          (prompt (with-out-str "Enter position on the board")))))))
