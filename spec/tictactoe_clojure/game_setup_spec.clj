@@ -2,12 +2,13 @@
   (:require [speclj.core :refer :all]
             [tictactoe-clojure.game-setup :refer :all]
             [tictactoe-clojure.console :as console]
-            [tictactoe-clojure.player :as player]))
+            [tictactoe-clojure.player :as player]
+            [tictactoe-clojure.symbol :refer :all]))
 
 (describe "tictactoe-clojure.game-setup"
-  (with human-player-X (player/create-player "Human" "X"))
-  (with human-player-O (player/create-player "Human" "O"))
-  (with computer-player-O (player/create-player "Computer" "O"))
+  (with human-player-X (player/create-player "Human" X))
+  (with human-player-O (player/create-player "Human" O))
+  (with computer-player-O (player/create-player "Computer" O))
 
   (describe "#get-board-size"
     (it "returns 3 if the user selects a 3x3 board"
@@ -26,7 +27,7 @@
     (it "prompts the user to select an opponent, if the user select 1, return a vector of Human Human"
       (with-redefs [console/prompt (fn [_] "1")]
         (should= ["Human" "Human"] (opponent-type))))
-    (it "prompts the user to select who goes first, if user select 1, return a vector of Human Computer"
+    (it "prompts the user to select who goes first, if user select 2, return a vector of Human Computer"
       (with-out-str (with-in-str "2\n1\n"
         (should= ["Human" "Computer"] (opponent-type)))))
     (it "prompts the user to select who goes first, if user select 2, return a vector of Computer Human"

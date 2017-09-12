@@ -1,7 +1,8 @@
 (ns tictactoe-clojure.game-setup
   (:require [tictactoe-clojure.stringify-msg :as stringify-msg]) 
   (:require [tictactoe-clojure.player :as player])  
-  (:require [tictactoe-clojure.console :as console]))
+  (:require [tictactoe-clojure.console :as console])
+  (:require [tictactoe-clojure.symbol :refer :all]))
 
 (defn get-board-size
   []
@@ -41,5 +42,5 @@
 
 (defn matchup-opponents 
   [players]
-    [(player/create-player (first players) "X") 
-     (player/create-player (second players) "O")])
+    [(player/create-player (first players) X) 
+     (player/create-player (second players) O)])

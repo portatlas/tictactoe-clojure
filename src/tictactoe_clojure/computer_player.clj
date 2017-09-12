@@ -4,46 +4,71 @@
   (:require [tictactoe-clojure.board :as board])
   (:require [tictactoe-clojure.rules :as rules]))
 
-(def max-cell-num-computable 12)
 (def preferred-positions-on-4x4 #{1 4 13 16})
-(def preferred-positions-on-5x5 #{13 1 5 21 25})
+(def preferred-positions-on-5x5 #{1 3 5 11 13 21 25})
+(def initial-alpha -100)
+(def initial-beta 100)
 
-(defn- create-pair
-  [coll-1 coll-2]
-  (partition 2 (interleave coll-1 coll-2)))
-
-(declare optimal-move-by-score)
-(declare score-board)
-
-(defn- score-board
-  [player board depth is-max-player]
-  (let [winner (rules/winner board)
-        other-player (rules/switch-turn player)]
-    (cond
-      (= (rules/draw? board) true) 0
-      (= winner player)
-      (if is-max-player
-        (- 10 depth)
-        (+ -10 depth))
-      (= winner other-player)
-      (if is-max-player
-        (+ -10 depth)
-        (- 10 depth))
-      :else
-        (second
-          (optimal-move-by-score other-player board (dec depth) (not is-max-player))))))
-
-(def memo-score-board (memoize score-board))
-
-(defn- optimal-move-by-score
-  [player board depth is-max-player]
-  (let [possible-moves (board/valid-slots board)
-        score-of-possible-move (map #(memo-score-board player (board/move board % player) depth is-max-player) possible-moves)
-        move-score-pair (create-pair possible-moves score-of-possible-move)
-        sorted-move-scores-pair (sort-by second move-score-pair)]
+(defn- assign-initial-score
+  [is-max-player]
     (if is-max-player
-      (last sorted-move-scores-pair)
-      (first sorted-move-scores-pair))))
+      [0 -100]
+      [0 100]))
+
+(defn- winning-score
+  [board depth max-player]
+    (if (= max-player (rules/winner board))
+      (+ 10 depth)
+      (- -10 depth)))
+
+(defn- gameover-move-score
+  [board depth max-player]
+    (if (rules/winner? board)
+      [0 (winning-score board depth max-player)]
+      [0 0]))
+
+(defn- find-max-min
+  [eval-comparator max-player best-position valued-position move-position]
+    (if (eval-comparator (second best-position) (second valued-position))
+      (vector move-position (second valued-position))
+      best-position))
+
+(defn- player-best-move-score
+  [is-max-player best-position valued-position move-position]
+    (if is-max-player
+      (find-max-min < is-max-player best-position valued-position move-position)
+      (find-max-min > is-max-player best-position valued-position move-position)))
+
+(defn- recalculate-alpha 
+  [is-max-player best-score alpha]
+    (if is-max-player
+      (max (second best-score) alpha)
+      alpha))
+
+(defn- recalculate-beta
+  [is-max-player? move-score beta]
+    (if (not is-max-player?)
+      (min (second move-score) beta)
+      beta))
+
+(defn- prune?
+  [alpha beta]
+    (>= alpha beta))
+
+(declare mem-minimax)
+
+(defn- end-branch-traversal? 
+  [valid-slots alpha beta]
+    (or
+      (prune? alpha beta)
+      (= 0 (count valid-slots))))
+
+(defn- move-on-preferred-position
+  [board valued-moves]
+  (first
+    (clojure.set/intersection
+      (set (board/valid-slots board))
+      valued-moves)))
 
 (defn- check-seq-for-dups [seq]
   (for [[id freq] (frequencies seq)
@@ -54,7 +79,7 @@
   [board player]
   (.indexOf
     (map #(check-seq-for-dups %) (rules/winning-combinations board))
-    (list (rules/switch-turn player))))
+    (list (rules/switch-symbol player))))
 
 (defn- board-with-potential-winner
   [board player]
@@ -69,32 +94,49 @@
     true
     false))
 
-(defn- move-on-preferred-position
-  [board valued-moves]
-  (first
-    (clojure.set/intersection
-      (set (board/valid-slots board))
-      valued-moves)))
-
 (defn- move-to-block-opponent
   [board player]
   (first
     (board/valid-slots
       (nth (rules/winning-combinations board) (board-with-potential-winner board player)))))
 
+(defn- minimax
+  [board depth is-max-player max-player alpha beta]
+    (if (rules/game-over? board)
+      (gameover-move-score board depth max-player)
+      (do
+        (loop [[first-free-slot & rest] (board/valid-slots board)
+                best-position (assign-initial-score is-max-player)
+                alpha alpha
+                beta beta]
+          (let [updated-board (board/move board first-free-slot (rules/whose-turn board))
+                position (mem-minimax updated-board (dec depth) (not is-max-player) max-player alpha beta)
+                latest-best-move-score (player-best-move-score is-max-player best-position position first-free-slot)
+                new-alpha (recalculate-alpha is-max-player latest-best-move-score alpha)
+                new-beta (recalculate-beta is-max-player latest-best-move-score beta)]
+            (if (end-branch-traversal? rest new-alpha new-beta)
+              latest-best-move-score
+              (recur rest latest-best-move-score new-alpha new-beta)))))))
+
+(def mem-minimax (memoize minimax))
+
 (defn optimal-move
-  [player board depth]
-  (let [board-size (board/board-size board)
-        use-preferred-position-4x4board? (and (= board-size 4) (> (count (board/valid-slots board)) max-cell-num-computable))
-        use-preferred-position-5x5board? (and (= board-size 5) (> (count (board/valid-slots board)) 20) (not= nil board-with-potential-winner board player))
-        opponent-about-to-win-b5x5board? (and (= board-size 5) (> (count (board/valid-slots board)) max-cell-num-computable) (opponent-close-to-win? board player))]
-   (cond
-     use-preferred-position-4x4board?
-       (move-on-preferred-position board preferred-positions-on-4x4)
-     use-preferred-position-5x5board?
-       (move-on-preferred-position board preferred-positions-on-5x5)
-     opponent-about-to-win-b5x5board?
-       (move-to-block-opponent board player)
-    :else
-     (first
-       (optimal-move-by-score player board depth true)))))
+  [player board]
+    (let[board-size (board/board-size board)
+         use-preferred-position-4x4board? (and (= board-size 4) (> (count (board/valid-slots board)) 13))
+         use-preferred-position-5x5board? (and (= board-size 5) (> (count (board/valid-slots board)) 20))
+         opponent-about-to-win-5x5board? (and (= board-size 5) (>= (count (board/valid-slots board)) 14) (opponent-close-to-win? board player))]
+      (cond
+        use-preferred-position-4x4board?
+          (move-on-preferred-position board preferred-positions-on-4x4)
+        use-preferred-position-5x5board?
+          (move-on-preferred-position board preferred-positions-on-5x5)
+        opponent-about-to-win-5x5board?
+          (move-to-block-opponent board player)  
+        :else
+          (do 
+            (let [depth (count (board/valid-slots board))
+                  is-max-player true
+                  max-player (rules/whose-turn board)
+                  best-move-score-pair (mem-minimax board depth is-max-player max-player initial-alpha initial-beta)]
+              (first best-move-score-pair))))))
